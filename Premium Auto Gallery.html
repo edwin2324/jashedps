@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Auto Gallery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #1A1E2C;
+            --secondary-color: #D4AF37;
+            --accent-color: #2C3E50;
+            --text-light: #F5F5F5;
+            --gradient-primary: linear-gradient(135deg, #1A1E2C 0%, #2C3E50 100%);
+            --gradient-accent: linear-gradient(45deg, #D4AF37 0%, #C19A6B 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--text-light);
+            color: var(--primary-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--gradient-primary);
+            color: var(--text-light);
+            border-radius: 1.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+        }
+
+        .stats {
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin: 1rem 0;
+        }
+
+        .form-section {
+            background: white;
+            padding: 3rem;
+            border-radius: 1.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.05);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-weight: 500;
+            color: var(--accent-color);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 0.8rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+        }
+
+        .car-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .car-card {
+            background: white;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .car-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .car-color {
+            height: 180px;
+            background-color: var(--car-color);
+            position: relative;
+        }
+
+        .car-info {
+            padding: 1.5rem 2rem 2rem;
+        }
+
+        .car-meta {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+            color: #666;
+        }
+
+        .car-price {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 0.8rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-accent);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .filter-section {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-section input, 
+        .filter-section select {
+            padding: 0.8rem 1.2rem;
+            min-width: 200px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 3rem;
+            border-radius: 1.5rem;
+            max-width: 600px;
+            width: 90%;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            .header {
+                padding: 2rem 1rem;
+            }
+            .car-list {
+                grid-template-columns: 1fr;
+            }
+            .form-section {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><i class="fa-solid fa-car"></i> Premium Auto Gallery</h1>
+            <p>Tu concesionario de autos de lujo</p>
+        </header>
+
+        <div class="dashboard">
+            <div class="card">
+                <h3>Total en Stock</h3>
+                <p class="stats" id="totalStock">$0</p>
+            </div>
+            <div class="card">
+                <h3>Vehículos Disponibles</h3>
+                <p class="stats" id="totalCars">0</p>
+            </div>
+            <div class="card">
+                <h3>Precio Promedio</h3>
+                <p class="stats" id="averagePrice">$0</p>
+            </div>
+        </div>
+
+        <section class="form-section">
+            <h2><i class="fa-solid fa-file-pen"></i> Registrar Nuevo Vehículo</h2>
+            <form id="carForm" onsubmit="handleSubmit(event)">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Marca</label>
+                        <input type="text" id="make" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Modelo</label>
+                        <input type="text" id="model" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Año</label>
+                        <input type="number" id="year" min="1900" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Precio ($)</label>
+                        <input type="number" id="price" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Color</label>
+                        <input type="color" id="color" value="#ff0000">
+                    </div>
+                    <div class="form-group">
+                        <label>Combustible</label>
+                        <select id="fuelType">
+                            <option value="gasolina">Gasolina</option>
+                            <option value="diesel">Diésel</option>
+                            <option value="electrico">Eléctrico</option>
+                            <option value="hibrido">Híbrido</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Agregar Vehículo</button>
+            </form>
+        </section>
+
+        <div class="filter-section">
+            <input type="text" id="searchInput" placeholder="Buscar por modelo o marca..." class="btn-ghost">
+            <select id="filterFuel" class="btn-ghost">
+                <option value="">Todos los combustibles</option>
+                <option value="gasolina">Gasolina</option>
+                <option value="diesel">Diésel</option>
+                <option value="electrico">Eléctrico</option>
+                <option value="hibrido">Híbrido</option>
+            </select>
+            <input type="number" id="filterYear" placeholder="Filtrar por año" class="btn-ghost">
+        </div>
+
+        <div class="car-list" id="carList"></div>
+
+        <div id="editModal" class="modal">
+            <div class="modal-content">
+                <h2><i class="fa-solid fa-pen-to-square"></i> Editar Vehículo</h2>
+                <form id="editForm" onsubmit="handleEdit(event)">
+                    <input type="hidden" id="editIndex">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Marca</label>
+                            <input type="text" id="editMake" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Modelo</label>
+                            <input type="text" id="editModel" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Año</label>
+                            <input type="number" id="editYear" min="1900" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Precio ($)</label>
+                            <input type="number" id="editPrice" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Color</label>
+                            <input type="color" id="editColor">
+                        </div>
+                        <div class="form-group">
+                            <label>Combustible</label>
+                            <select id="editFuelType">
+                                <option value="gasolina">Gasolina</option>
+                                <option value="diesel">Diésel</option>
+                                <option value="electrico">Eléctrico</option>
+                                <option value="hibrido">Híbrido</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Guardar Cambios</button>
+                    <button type="button" class="btn btn-ghost" onclick="closeModal()"><i class="fa-solid fa-xmark"></i> Cancelar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let cars = JSON.parse(localStorage.getItem('cars')) || [];
+        
+        function updateLocalStorage() {
+            localStorage.setItem('cars', JSON.stringify(cars));
+            updateStats();
+            displayCars();
+        }
+
+        function handleSubmit(e) {
+            e.preventDefault();
+            
+            const newCar = {
+                make: document.getElementById('make').value,
+                model: document.getElementById('model').value,
+                year: parseInt(document.getElementById('year').value),
+                price: parseFloat(document.getElementById('price').value),
+                color: document.getElementById('color').value,
+                fuelType: document.getElementById('fuelType').value,
+                registrationDate: new Date().toISOString()
+            };
+
+            cars.push(newCar);
+            e.target.reset();
+            updateLocalStorage();
+        }
+
+        function displayCars() {
+            const carList = document.getElementById('carList');
+            carList.innerHTML = '';
+            
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const fuelFilter = document.getElementById('filterFuel').value;
+            const yearFilter = document.getElementById('filterYear').value;
+
+            cars.forEach((car, index) => {
+                if ((!searchTerm || car.model.toLowerCase().includes(searchTerm) || car.make.toLowerCase().includes(searchTerm)) &&
+                    (!fuelFilter || car.fuelType === fuelFilter) &&
+                    (!yearFilter || car.year == yearFilter)) {
+                    
+                    const carCard = document.createElement('div');
+                    carCard.className = 'car-card';
+                    carCard.innerHTML = `
+                        <div class="car-color" style="--car-color: ${car.color}; background-color: ${car.color}"></div>
+                        <div class="car-info">
+                            <h3>${car.make} ${car.model}</h3>
+                            <div class="car-meta">
+                                <span><i class="fa-solid fa-calendar"></i> ${car.year}</span>
+                                <span><i class="fa-solid fa-gas-pump"></i> ${car.fuelType}</span>
+                            </div>
+                            <p class="car-price">$${car.price.toLocaleString()}</p>
+                            <div class="car-actions">
+                                <button class="btn btn-secondary" onclick="sellCar(${index})"><i class="fa-solid fa-handshake"></i> Vender</button>
+                                <button class="btn btn-ghost" onclick="openEditModal(${index})"><i class="fa-solid fa-pen"></i> Editar</button>
+                            </div>
+                        </div>
+                    `;
+                    carList.appendChild(carCard);
+                }
+            });
+        }
+
+        function updateStats() {
+            const totalStock = cars.reduce((sum, car) => sum + car.price, 0);
+            const averagePrice = cars.length ? totalStock / cars.length : 0;
+            
+            document.getElementById('totalStock').textContent = `$${totalStock.toLocaleString()}`;
+            document.getElementById('totalCars').textContent = cars.length;
+            document.getElementById('averagePrice').textContent = `$${averagePrice.toLocaleString(undefined, {maximumFractionDigits: 2})}`;
+        }
+
+        function sellCar(index) {
+            if (confirm('¿Confirmar venta de este vehículo?')) {
+                cars.splice(index, 1);
+                updateLocalStorage();
+            }
+        }
+
+        function openEditModal(index) {
+            const car = cars[index];
+            document.getElementById('editIndex').value = index;
+            document.getElementById('editMake').value = car.make;
+            document.getElementById('editModel').value = car.model;
+            document.getElementById('editYear').value = car.year;
+            document.getElementById('editPrice').value = car.price;
+            document.getElementById('editColor').value = car.color;
+            document.getElementById('editFuelType').value = car.fuelType;
+            document.getElementById('editModal').style.display = 'flex';
+        }
+
+        function handleEdit(e) {
+            e.preventDefault();
+            const index = document.getElementById('editIndex').value;
+            
+            cars[index] = {
+                ...cars[index],
+                make: document.getElementById('editMake').value,
+                model: document.getElementById('editModel').value,
+                year: parseInt(document.getElementById('editYear').value),
+                price: parseFloat(document.getElementById('editPrice').value),
+                color: document.getElementById('editColor').value,
+                fuelType: document.getElementById('editFuelType').value
+            };
+
+            closeModal();
+            updateLocalStorage();
+        }
+
+        function closeModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', displayCars);
+        document.getElementById('filterFuel').addEventListener('change', displayCars);
+        document.getElementById('filterYear').addEventListener('input', displayCars);
+
+        // Inicialización
+        displayCars();
+        updateStats();
+    </script>
+</body>
+</html>
